@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر ZALLOOM | التنزيل المباشر</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-bg: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            margin: 1rem auto;
+        }
+
+        .download-btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 1.5rem 4rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            background: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .download-btn {
+                padding: 1.2rem 3rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">زلـوم</div>
+            <div class="nav-links">
+                <a href="#contact" style="margin-left: 2rem; text-decoration: none; color: var(--primary-color);">اتصل بنا</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1 class="page-title">تنزيل كتالوج المنتجات الحصري</h1>
+        
+        <button class="download-btn" onclick="downloadImages()">
+            <i class="fas fa-download"></i>
+            اضغط لتنزيل الصور
+        </button>
+    </main>
+
+    <script>
+        // قائمة بالصور المخفية (استبدل الروابط الحقيقية)
+        const secretImages = [
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-wnkJ76NNpEMsi7lw6hv3Nc-1m3DVUDBC4g&s',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-wnkJ76NNpEMsi7lw6hv3Nc-1m3DVUDBC4g&s',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-wnkJ76NNpEMsi7lw6hv3Nc-1m3DVUDBC4g&s'
+        ];
+
+        async function downloadImages() {
+            try {
+                if(secretImages.length === 0) {
+                    alert('⚠️ لا توجد صور متاحة للتنزيل');
+                    return;
+                }
+
+                // تنزيل كل صورة بشكل منفصل
+                for (const [index, url] of secretImages.entries()) {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('فشل في تحميل الصورة');
+                    const blob = await response.blob();
+                    
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `product-${index + 1}.jpg`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // تأخير 500 مللي ثانية بين كل تنزيل
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+            } catch (error) {
+                alert('⚠️ حدث خطأ في التنزيل: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
